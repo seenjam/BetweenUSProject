@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">					<!-- 시험에 이부분만 나오고 아래는 다 적어야함 ㅜ★★★★★ -->
+
+<!-- 회원 정보 처리 SQL -->
+<!--<mapper namespace="">  -->
+<!--  </mapper>-->
+
+<!-- ★★★★ㅁ8시험에서 이런상태일거임,,,,, -->
+
+
+
+<mapper namespace="DAO.MemberMapper">
+
+
+<insert parameterType="Member" id="insertMember">
+
+<!-- 파라미터타입인지, 리절트타입인지 잘 판단하깅 -->
+
+insert into Member(memID,memPW,memName,memAddress,memState) 
+values(#{memID},#{memPW},#{memName},#{memAddress},#{memState}) 
+</insert>
+
+<select parameterType="String" id="IDcheck" resultType="int"> 
+select count(*) 
+from Member 
+where memID = #{memID}
+ </select>
+
+<select parameterType="String" id="LoginCheck" resultType="String">
+ select memPW 
+ from Member 
+ where memID = #{memID} </select>
+
+<update parameterType="String" id="updateLoginState"> 
+update Member 
+set memState = '1' 
+where memID = #{memID} 
+</update>
+
+<select parameterType="String" id="searchFriendByNameCount" resultType="int"> 
+select count(*) 
+from Member 
+where memName= #{memName} </select>
+
+<select parameterType="String" id="searchFriendByName" resultType="Member">
+ select memID,memPW,memName,memAddress,memState 
+ from Member 
+ where memName= #{memName} 
+ </select>
+
+<select parameterType="String" id="searchFriendByNameList" resultType="Member"> 
+select memID,memPW,memName,memAddress,memState 
+from Member 
+where memName= #{memName} </select>
+
+<!-- id로 찾기-->
+<select parameterType="String" id="searchFriendByIDCount" resultType="int">
+ select count(*) 
+ from Member 
+ where memID= #{memID} </select>
+
+<select parameterType="String" id="searchFriendByID" resultType="Member"> 
+select memID,memPW,memName,memAddress,memState
+from Member 
+where memID= #{memID} </select>
+
+<select parameterType="String" id="searchFriendByIDList" resultType="Member"> 
+select memID,memPW,memName,memAddress,memState 
+from Member 
+where memID= #{memID} </select>
+
+<select parameterType="String" id="MyInfo" resultType="Member"> 
+select memID,memPW,memName,memAddress,memState 
+from Member 
+where memID= #{memID} 
+</select>
+
+</mapper>
