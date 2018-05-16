@@ -16,10 +16,14 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import DAO.FavoriteDAO;
 import DAO.PlaceDAO;
 import DAO.SearchTwoPlaceDao;
+import DAO.TwoPlaceDAO;
+import VO.FavoriteVO;
 import VO.MemberVO;
 import VO.PlaceVO;
+import VO.TestPlaceVO;
 
 public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelectionListener{
 	
@@ -32,20 +36,23 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 	private JButton searchAroundPlace;//aroundLocation Search Button
 	private Panel searchTwoPlaceUIPanel = new Panel(); ; // Search_Panel of SearchTwoPlaceUI
 	private JLabel googleMap = new JLabel(); //Map put Label in SearchTwoPlaceUI 
-	private JList firstSearchPlace_list; //
-	private JList secondSearchPlace_list;//�ι�° ��� �Է¿� ���� ����� List
-	private PlaceVO searchPlace = null, searchPlace2 = null; //list���� ���õ� ���� �� SearchPlace VO
-	private JButton mapZoonIn_btn,mapZoonOut_btn; //Map ����, �ܾƿ� Button
-	private boolean isChanging = false; //�� ���� list�� �����Ƽ� Ŭ���ϱ� ������ �������ִ� ������ �ʿ�
-	private int isCurrentValue = 0; //Zoom Button Ŭ���� ����ϴ� ���� (isCurrentValue�� 1: ù��° �ּҰ� ���� , 2:�ι�° �ּҰ� ���� ,3: ��� �ּ�)
-	private String location = "",location2 =""; //list�� Ŭ���� ��, zoom button Ŭ���� �� location�� ������ �޴� String 
-	private String pathLocation1,pathLocation2; //�߰�ã�� ��ư�� Ŭ���� ��, zoom button Ŭ���� �� pathLocation�� ������ �޴� String 
-	JLabel lblNewLabel_1,lblNewLabel_2,lblNewLabel_3; //��� Ȯ�ο� (���￹��) ************
+	private JList firstSearchPlace_list; //first place search result values in list
+	private JList secondSearchPlace_list;//second place search result values in list
+	private PlaceVO searchPlace = null, searchPlace2 = null; //value selected in list put PlaceVO
+	private JButton mapZoonIn_btn,mapZoonOut_btn; //Map zoom :  in, out Button
+	private boolean isChanging = false; //두개의 list를 번갈아서 클릭하기 때문에 구분해주는 변수가 필요하다
+	private int isCurrentValue = 0; //Zoom Button 클릭시 사용하는 변수 (isCurrentValue�� 1: 첫번째주소가 현재, 2: 두번째주소가 현재, 3: 경로주소)
+	private String location = "",location2 =""; //list를 클릭할때  zoom button 클릭할때  location정보를 받는 String
+	private String pathLocation1,pathLocation2; //중간찾기 버튼을 클릭할때 , zoom button을 클릭할때  pathLocation의  정보를 받는  String (경로를 나타내기위해)
+	JLabel lblNewLabel_1,lblNewLabel_2,lblNewLabel_3; //잠깐 확인용 (지울 예정)
 	private PlaceDAO placeDao = new PlaceDAO();
+	private TwoPlaceDAO twoPlaceDao = new TwoPlaceDAO();
+	private MemberVO myInfo = null;
 	private SearchTwoPlaceDao searchTwoPlaceDao = new SearchTwoPlaceDao(); 
-	public SearchTwoPlaceUI(MemberVO myInfo) {
+	private FavoriteDAO favoriteDao = new FavoriteDAO();
+	public SearchTwoPlaceUI(MemberVO mem) {
 		setSize(1220, 640);
-		
+		this.myInfo = mem;
 		
 		//gogJTabbedPane
 		
@@ -57,13 +64,13 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		second_lb.setBounds(14, 213, 42, 30);
 		searchTwoPlaceUIPanel.add(second_lb);
 		
-		//�˻�â panel�� ��ġ ����
+		//
 		searchTwoPlaceUIPanel.setLocation(87, 42);
 		searchTwoPlaceUIPanel.setBackground(Color.WHITE);
 		searchTwoPlaceUIPanel.setSize(372, 558);
 		searchTwoPlaceUIPanel.setLayout(null);
 		
-		//����
+		//
 		firstSearchPlace_tf = new JTextField(30);
 		secondSearchPlace_tf = new JTextField(30);
 		firstSearchPlace_btn = new JButton("Search");
@@ -72,7 +79,6 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		secondSearchPlace_list = new JList();
 
 		
-		//�˻�â panel�ȿ� textField, button, List ���
 		searchTwoPlaceUIPanel.add(firstSearchPlace_tf);
 		searchTwoPlaceUIPanel.add(firstSearchPlace_btn);
 		//searchTwoPlaceUIPanel.add(firstSearchPlace_list);
@@ -80,7 +86,6 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		searchTwoPlaceUIPanel.add(secondSearchPlace_btn);
 		//searchTwoPlaceUIPanel.add(secondSearchPlace_list);
 		
-		//�˻�â panel�ȿ� textField, button, List ��ġ����
 		firstSearchPlace_tf.setBounds(59, 80, 126, 30);
 		firstSearchPlace_btn.setBounds(210, 77, 84, 36);
 		firstSearchPlace_list.setBounds(58, 122, 236, 78);
@@ -88,23 +93,21 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		secondSearchPlace_btn.setBounds(210, 210, 84, 36);
 		secondSearchPlace_list.setBounds(59, 255, 236, 78);
 		
-		//btn�� ActionListener ���
+
+		
 		firstSearchPlace_btn.addActionListener(this);
 		secondSearchPlace_btn.addActionListener(this);
 		
 		
-		//�ѹ��� �� �׸� ������ �� �ִ� ���� ����Ʈ�� ���
 		firstSearchPlace_list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);//�ѹ��� �� �׸� ������ �� �ִ� ���� ����Ʈ�� ���
 		//add(new JScrollPane(firstSearchPlace_list));
 		firstSearchPlace_list.addListSelectionListener(this);
 		
-		//�ѹ��� �� �׸� ������ �� �ִ� ���� ����Ʈ�� ���
 		secondSearchPlace_list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);//�ѹ��� �� �׸� ������ �� �ִ� ���� ����Ʈ�� ���
 		//add(new JScrollPane(firstSearchPlace_list));
 		secondSearchPlace_list.addListSelectionListener(this);
 		
 		
-		//list1,2�� scrollpane ����
 		JScrollPane scrollPane = new JScrollPane(firstSearchPlace_list);
 		JScrollPane scrollPane2 = new JScrollPane(secondSearchPlace_list);
 		scrollPane.setViewportView(firstSearchPlace_list);
@@ -142,7 +145,6 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		searchTwoPlaceUIPanel.add(lblNewLabel_3);
 		
 		
-		//Map�� ��Ÿ���� Label�� ��ġ ����
 		googleMap.setBounds(500, 50, 593, 550);
 		setLayout(null);
 				
@@ -156,13 +158,13 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		searchTwoPlaceUIPanel.add(searchAroundPlace);
 		
 		
-		//zoom Ȯ�� Button
+		//zoom 인Button
 		mapZoonIn_btn = new JButton("+");
 		mapZoonIn_btn.setBounds(1126, 526, 65, 27);
 		mapZoonIn_btn.addActionListener(this);
 		add(mapZoonIn_btn);
 		
-		//zoom ��� Button
+		//zoom 아웃 Button
 		mapZoonOut_btn = new JButton("-");
 		mapZoonOut_btn.setBounds(1126, 565, 65, 27);
 		mapZoonOut_btn.addActionListener(this);
@@ -174,12 +176,12 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		
 	}
 
-	//��ư Ŭ���� �׼� ������
+	//액션 리스너
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-	    //ù��° ��ġ ã�� ��ư Ŭ���� 
+	    //첫번째 장소 검색 
 		if(e.getSource() == firstSearchPlace_btn ) {
 			String firstSearchPlace = firstSearchPlace_tf.getText();
 			ArrayList<PlaceVO> sp = searchTwoPlaceDao.receivekakaoMapAPI(firstSearchPlace);
@@ -187,7 +189,7 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 				firstSearchPlace_list.setListData(sp.toArray());
 			}
 		}	
-		//�ι�° ��ġ ã�� ��ư Ŭ���� 
+		//두번째 장소 검색
 		if(e.getSource() == secondSearchPlace_btn ) {
 			String secondSearchPlace = secondSearchPlace_tf.getText();
 			ArrayList<PlaceVO> sp2 = searchTwoPlaceDao.receivekakaoMapAPI(secondSearchPlace);
@@ -195,18 +197,45 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 				secondSearchPlace_list.setListData(sp2.toArray());
 			}
 		}	
-		//���ã�� ��ư Ŭ���� 
+		//즐겨찾기 버튼 검색
 		if(e.getSource() == favorite_btn) {
 			
 			//�켱 PlaceVO�� searchPlace,searchPlace2�� DB(���̺�Place)�� ����
 			//PlaceVO sp = new PlaceVO(x + "" + y, address_name, x, y);// x:lon:�浵    // y:lat:����
-			placeDao.insertPlace(searchPlace);
-			placeDao.insertPlace(searchPlace2);
-
 			
+			//유효성 확인 후 Place 테이블에 searchPlace, searchPlace2 삽입
+			if(placeDao.placeIDCheck(searchPlace.getPlaceID()) == 0) {
+				System.out.println("searchPlace 삽입");
+				placeDao.insertPlace(searchPlace);
+			}
+			if(placeDao.placeIDCheck(searchPlace2.getPlaceID()) == 0) {
+				System.out.println("searchPlace2 삽입");
+				placeDao.insertPlace(searchPlace2);
+			}
+			
+			TestPlaceVO testPlaceVO = new TestPlaceVO(searchPlace.getPlaceID(), searchPlace2.getPlaceID());
+			
+			//유효성 확인 후 TwoPlace 테이블에 testPlaceVO(searchPlace, searchPlace2) 삽입
+			if(twoPlaceDao.twoPlaceCheck(testPlaceVO) == 0) {
+				System.out.println("twoPlaceDao에 testPlaceVO 삽입");
+				twoPlaceDao.insertTwoPlace(testPlaceVO);
+
+			}else {
+				System.out.println("동일한 값이 존재합니다. 확인해보세용!");
+			}
+			FavoriteVO favoriteVO = new FavoriteVO(myInfo.getMemID(),twoPlaceDao.findIdTwoPlace(testPlaceVO));
+			
+			System.out.println(favoriteVO);
+			if(favoriteDao.favoriteCheck(favoriteVO) == 0) {
+				System.out.println("favoriteDao에 favoriteVO 삽입");
+				favoriteDao.insertFavorite(favoriteVO);
+			}else {
+				System.out.println("즐겨찾기등록이 안되용 동일한값이 존재해서ㅠㅠ!");
+			}
+		
 			
 		}	
-		//�߰���ġ ã�� ��ư Ŭ����
+		//중간찾기 버튼 검색
 		if(e.getSource() == middleSearch_btn) {
 			System.out.println(searchPlace);
 			System.out.println(searchPlace2);
@@ -215,7 +244,7 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 				lblNewLabel_2.setText(searchPlace2 +"");
 				lblNewLabel_3.setText(searchTwoPlaceDao.middlePlaceLon(searchPlace,searchPlace2)+","+searchTwoPlaceDao.middlePlaceLat(searchPlace,searchPlace2));
 			}else {
-				System.out.println("�� ��Ҹ� ��� �����ؾ� �����մϴ�.");
+				System.out.println("searchPlace와 searchPlace2가 없습니당");
 			}
 			pathLocation1 = searchPlace.getPlaceLat()+","+searchPlace.getPlaceLon();
 			pathLocation2 = searchPlace2.getPlaceLat()+","+searchPlace2.getPlaceLon();
@@ -225,18 +254,18 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 			isCurrentValue = 3;
 			
 		}	
-		//�ֺ���� ã�� ��ư Ŭ����
+		//주변찾기 버튼 검색
 		if(e.getSource() ==searchAroundPlace) {
-			System.out.println("searchTwoPLaceUI���� �ֺ����ã���ư Ŭ���Ҷ��� if ");
+			System.out.println("searchTwoPLaceUI생성");
 			AroundPlaceUI aroundPlaceUI = new AroundPlaceUI(searchTwoPlaceDao.middlePlaceInfoArray(searchPlace,searchPlace2));
 			//aroundPlaceUI.setPostAroundPlaceArray(searchTwoPlaceDao.middlePlaceInfoArray(searchPlace,searchPlace2));
 			aroundPlaceUI.setVisible(true);
 		}
 		
-		//zoom ��ư Ŭ����
+		//zoom인
 		if(e.getSource() == mapZoonIn_btn){
 			
-			 //searchTwoPlaceDao.valueZoom(1) : Ȯ��
+			 //searchTwoPlaceDao.valueZoom(1) : 줌 인
 			 if(isCurrentValue == 1) {
 				 	zoomSetMap(location,searchTwoPlaceDao.valueZoom(1));
 				    setSize(1350, 800);
@@ -249,10 +278,10 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		     }
 			 
 		}
-		//zoom ��ư Ŭ����
+		//zoom아웃
 		if(e.getSource() == mapZoonOut_btn){
 			
-			 //searchTwoPlaceDao.valueZoom(0) : ���
+			 //searchTwoPlaceDao.valueZoom(0) : 줌 아웃
 			 if(isCurrentValue == 1) {
 				 	zoomSetMap(location,searchTwoPlaceDao.valueZoom(0));
 					setSize(1350, 800);
@@ -272,23 +301,23 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
-		if(!e.getValueIsAdjusting()) { //���� �ι����� �ʵ��� ����� ��.
+		if(!e.getValueIsAdjusting()) { //한번의 값만 받도록 도와줌
 			
 			if(!isChanging) {
-				//ù��° ����Ʈ select
+				//첫번째 리스트 select
 				if(e.getSource() == firstSearchPlace_list&&firstSearchPlace_list.getSelectedIndex()!=-1) {
-					//���õ� ���� SearchPlace VO�� ����
+					//선택된 값을  SearchPlace VO에 넣음
 					System.out.println("�̰� ���´ٸ� list�� ��������ʾҴµ��� ���� �����°���.");
 					isChanging = true;
 					searchPlace = (PlaceVO)firstSearchPlace_list.getSelectedValue();
 					location = searchPlace.getPlaceLat()+","+searchPlace.getPlaceLon();
-					//���� ����
+					//지도생성
 					listClickSetMap(location,searchTwoPlaceDao.valueZoom(9));
-					//ũ��������
+					//크기재지정
 					setSize(1220, 640);
 					
 					searchTwoPlaceDao.zoom=11;
-					//secondSearchPlace_list�� �����ϰ� �ٽ� firstSearchPlace_list�� ������ �� �ٽ� ���� �����ֱ� ����
+					//secondSearchPlace_list를 선택하고  firstSearchPlace_list를 다시 선택할때 다시 지도 보여주기위해
 					secondSearchPlace_list.clearSelection();
 					System.out.println(searchPlace);
 					isChanging = false;
@@ -296,7 +325,7 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 				}
 			}
 			if(!isChanging) {
-				//�ι�° ����Ʈ select
+				//두번째 리스트 select
 				if(e.getSource() == secondSearchPlace_list&&secondSearchPlace_list.getSelectedIndex()!=-1) {
 					isChanging = true;
 					searchPlace2 = (PlaceVO)secondSearchPlace_list.getSelectedValue();
@@ -315,25 +344,25 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 				
 	}
 	
-	//������ googleMap�� Ȯ��, ��ҽ� ��� 
+	//첫번째, 두번째 장소에 대한 googleMap zoom 클릭시
 	public void zoomSetMap(String location,int zoom) {
 		searchTwoPlaceDao.zoomDownloadMap(location,zoom);
 		googleMap.setIcon(searchTwoPlaceDao.getMap(location,zoom));
 		searchTwoPlaceDao.fileDelete(location+""+zoom);
 	}
-	//�ּ�list�� Ŭ���Ͽ� googleMap�� ������ �� ���
+	//첫번째, 두번째 장소에 대한 googleMap
 	public void listClickSetMap(String location,int zoom) {
 		searchTwoPlaceDao.listClickdownloadMap(location,zoom);
 		googleMap.setIcon(searchTwoPlaceDao.getMap(location,zoom));
 		searchTwoPlaceDao.fileDelete(location+""+zoom);
 	}
-	//������ googleMap�� Ȯ��, ��ҽ� ��� 
+	//중간찾기에서  googleMap zoom 클릭시
 	public void zoomSetMap(String location,String location2,int zoom) {
 		searchTwoPlaceDao.zoomMiddleSearchDownloadMap(location,location2,zoom);
 		googleMap.setIcon(searchTwoPlaceDao.getPathMap(location,location2,zoom));
 		searchTwoPlaceDao.fileDelete(location+""+zoom);
 	}
-	//�߰�ã�� btn�� Ŭ���Ͽ� googleMap�� ������ �� ���
+	//중간찾기버튼을 클릭시 경로를 Map에 보여줌
 	public void middleSearchClickSetMap(String location,String location2,int zoom) {
 		searchTwoPlaceDao.middleSearchClickdownloadMap(location,location2,zoom);
 		googleMap.setIcon(searchTwoPlaceDao.getPathMap(location,location2,zoom));
