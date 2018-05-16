@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">					<!-- 시험에 이부분만 나오고 아래는 다 적어야함 ㅜ★★★★★ -->
+
+<mapper namespace = "DAO.FavoriteMapper">
+<insert id = "insertFavorite" parameterType="Favorite"> <!-- 파라미터타입인지, 리절트타입인지 잘 판단하깅 -->
+insert into Favorite
+(
+	memID
+	,twoPlaceSeq
+)
+values(
+	#{memID}
+	,#{twoPlaceSeq}
+)
+</insert>
+
+<select id="favoriteCheck" parameterType = "Favorite" resultType="int">
+select count(*)
+from Favorite
+where memID = #{memID} and twoPlaceSeq = #{twoPlaceSeq}
+</select>
+<select id="listFavorite" resultType="Favorite">
+select 
+	memID
+	,twoPlaceSeq
+from Favorite
+</select>
+
+</mapper>
