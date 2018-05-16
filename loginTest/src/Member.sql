@@ -52,3 +52,10 @@ select *
 from Place;
 select *
 from TwoPlace;
+select *
+from Favorite;
+
+
+
+delete MEMBER 
+where MEMID = 'aaaaa'
