@@ -24,28 +24,22 @@ public class SearchTwoPlaceDao {
 
 	public ArrayList<PlaceVO> receivekakaoMapAPI(String Searchplace) {
 
-		ArrayList<PlaceVO> searchPlace_aList = null; // �˻��� ��ġ�� ��ġ��� (�˻��� �Ż絿�� ��ġ��� :������ �Ż絿, ���Ǳ� �Ż絿 ...)
+		ArrayList<PlaceVO> searchPlace_aList = null; // 검색한 위치의 위치목록 (검색어 신사동의 위치목록 :강남구 신사동, 관악구 신사동 ...)
 		ArrayList<PlaceVO> searchPlaceAround_aList = new ArrayList<>();
 		try {
 			// url : kakao map api
 			URL obj = new URL("https://dapi.kakao.com/v2/local/search/address.json?query="
 					+ URLEncoder.encode(Searchplace, "UTF-8"));
-			/*
-			 * https://maps.googleapis.com/maps/api/place/textsearch/json?query=��ȭ��+in+����&
-			 * key=AIzaSyDatRmd5Xn1gzZQlgZWoUuLMRKwQZTPAsc
-			 */ /*
-				 * https://maps.googleapis.com/maps/api/place/textsearch/json?query=++�����&key=
-				 * AIzaSyDatRmd5Xn1gzZQlgZWoUuLMRKwQZTPAsc
-				 */
+			
 			System.out.println(Searchplace);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-			// APIŰ �� ���
+			// API키 값 등록
 			con.setRequestProperty("Authorization", "KakaoAK b6ec5ff96d29443fdeb760fcbcf289ef");
 			/* con.setRequestProperty("Accept-Charset", "UTF-8"); */
 
 			int responseCode = con.getResponseCode();
-			System.out.println("응답코드: " + responseCode);
+			System.out.println("응답 코드 : " + responseCode);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
@@ -64,16 +58,16 @@ public class SearchTwoPlaceDao {
 			int searchCount = jsonMeta.getInt("total_count");
 			searchPlace_aList = new ArrayList<>();
 
-			// �Ѱ� �̻��� ��ġ�� ã���� ��
+			// 한개 이상의 위치를 찾았을 때
 			if (searchCount != 0) {
 				for (int i = 0; i < searchCount; i++) {
 
 					JSONObject o = (JSONObject) jsonDoucumentArray.get(i);
 					String address_name = o.getString("address_name");
 					JSONObject o2 = o.getJSONObject("address");
-					String x = o2.getString("x"); // x:lon:�浵
-					String y = o2.getString("y"); // y:lat:����
-					PlaceVO sp = new PlaceVO(x + "" + y, address_name, x, y);// x:lon:�浵    // y:lat:����
+					String x = o2.getString("x"); // x:lon:경도
+					String y = o2.getString("y"); // y:lat:위도
+					PlaceVO sp = new PlaceVO(x + "" + y, address_name, x, y);// x:lon경도    // y:lat:위도
 					searchPlace_aList.add(sp);
 				}
 			} else {
@@ -89,32 +83,32 @@ public class SearchTwoPlaceDao {
 	}
 
 	public int valueZoom(int inOut) {
-		// zoom ����
+		// zoom 증가
 		if (inOut == 1) {
 			return zoom++;
-		}
-		// zoom ���
+		}	
+		// zoom 축소
 		else if (inOut == 0) {
-			return zoom--;
+			return zoom--;	
 		} else {
-			//inOut���� 9�϶��� zoom ��ư�� Ŭ���� ���� �ƴ϶� list�� Ŭ�� �� 
+			//inOut값이 9일때는 zoom 버튼을 클릭할 때가 아니라 list를 클릭 시 
 		}
-		return zoom;
+		 return zoom;
 
 	}
-	//zoom �Ҷ� dowmloadMap
+	//zoom으로 dowmloadMap
 	public void zoomDownloadMap(String location, int zoom) {
 		// TODO Auto-generated method stub
 		try {
 
-			System.out.println(location + ",zoom��" + zoom);
+			System.out.println(location + ",zoom값" + zoom);
 
-			// location�� "latitude,longitude" ������� ����.
+			//location은 "latitude,longitude" 순서대로 들어간다.
 			String imageUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + location + "&zoom=" + zoom
 					+ "&size=300x300" + "&scale=2" + "&markers=color:blue%7Clabel:S%7C" + location
 					+ "&key=AIzaSyBmI8tw1VHRQKDavypHLpgwcXKrG-Xx08Y ";
 
-			// ���۷� ���� map image�� �д´�
+			// �// 구글로 부터 map image를 읽는다
 			// then save it to a local file: location + "" + zoom
 			URL url = new URL(imageUrl);
 			InputStream is = url.openStream();
@@ -132,15 +126,14 @@ public class SearchTwoPlaceDao {
 			e.printStackTrace();
 		}
 	}
-	//list Ŭ�� �Ҷ� dowmloadMap
-	public void listClickdownloadMap(String location, int zoom) {
-		// TODO Auto-generated method stub
-		try {
-			
-			//zoom���� 11�� �ʱ�ȭ �����ش�.
+	//list 클릭 할때 dowmloadMap
+		public void listClickdownloadMap(String location, int zoom) {
+			// TODO Auto-generated method stub
+			try {
+				
+				//zoom값을 11로 초기화 시켜준다.
 			zoom = 11;
-			
-			System.out.println(location + ",zoom��" + zoom);
+			System.out.println(location + ",zoom값" + zoom);
 			
 			String imageUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + location + "&zoom=" + zoom
 					+ "&size=300x300" + "&scale=2" + "&markers=color:blue%7Clabel:S%7C" + location
@@ -166,11 +159,11 @@ public class SearchTwoPlaceDao {
 		// TODO Auto-generated method stub
 		try {
 			
-			//zoom���� 11�� �ʱ�ȭ �����ش�.
+			//zoom값을 11로 초기화 시켜준다.
 			zoom = 11;
 		
 			System.out.println(location + "," + zoom);
-			//location�� lat, lon ������� ����
+			//location은 lat, lon 순서대로 들어간다
 			String imageUrl = "https://maps.googleapis.com/maps/api/staticmap?"
 					+ "size=300x300" 
 					+ "&zoom=" + zoom
