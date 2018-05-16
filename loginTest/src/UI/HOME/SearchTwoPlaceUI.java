@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionListener;
 
 import DAO.PlaceDAO;
 import DAO.SearchTwoPlaceDao;
+import VO.MemberVO;
 import VO.PlaceVO;
 
 public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelectionListener{
@@ -42,7 +43,7 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 	JLabel lblNewLabel_1,lblNewLabel_2,lblNewLabel_3; //��� Ȯ�ο� (���￹��) ************
 	private PlaceDAO placeDao = new PlaceDAO();
 	private SearchTwoPlaceDao searchTwoPlaceDao = new SearchTwoPlaceDao(); 
-	public SearchTwoPlaceUI() {
+	public SearchTwoPlaceUI(MemberVO myInfo) {
 		setSize(1220, 640);
 		
 		

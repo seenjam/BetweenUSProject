@@ -12,10 +12,10 @@ import VO.MemberVO;
 
 public class HomeUI extends JFrame{
 	
-	private SearchTwoPlaceUI searchTwoPlaceUI = new SearchTwoPlaceUI();
+	private SearchTwoPlaceUI searchTwoPlaceUI;
 	private FriendUI friendUI ;			// 친구 페이지
 	private JLabel myID_lb=new JLabel("");
-	
+	private FavoriteUI favoriteUI;
 	
 	private MemberVO myInfo=null;		// 로그인한 나의 정보가 들어가 있음
 	
@@ -33,14 +33,11 @@ public class HomeUI extends JFrame{
 		tabbedPane.setBounds(47, 54, 1231, 654);
 		getContentPane().add(tabbedPane);
 		
-		
+		searchTwoPlaceUI = new SearchTwoPlaceUI(myInfo);
 		tabbedPane.addTab("중간찾기", null, searchTwoPlaceUI, null);
 		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("주변찾기", null, panel_1, null);
-		
-		JPanel panel_2 = new JPanel();
-		tabbedPane.addTab("즐겨찾기", null, panel_2, null);
+		favoriteUI = new FavoriteUI(myInfo);
+		tabbedPane.addTab("즐겨찾기", null, favoriteUI, null);
 		
 		//JPanel panel_3 = new JPanel();
 		friendUI = new FriendUI(myInfo);
