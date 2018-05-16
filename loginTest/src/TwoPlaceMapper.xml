@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">					<!-- 시험에 이부분만 나오고 아래는 다 적어야함 ㅜ★★★★★ -->
+
+
+<mapper namespace = "DAO.TwoPlaceMapper">
+<insert id = "insertTwoPlace" parameterType="TestPlaceVO"> <!-- 파라미터타입인지, 리절트타입인지 잘 판단하깅 -->
+insert into TwoPlace
+(
+	TwoPlaceSeq
+	,placeID1
+	,placeID2
+)
+values(
+	TwoPlaceSeq.nextVal
+	,#{placeID1}
+	,#{placeID2}
+)
+</insert>
+<select id="twoPlaceCheck" parameterType = "TestPlaceVO" resultType="int">
+select count(*)
+from TwoPlace
+where placeID1 = #{placeID1} and placeID2 = #{placeID2}
+</select>
+<select id="findIdTwoPlace" parameterType = "TestPlaceVO" resultType="String">
+select TwoPlaceSeq
+from TwoPlace
+where placeID1 = #{placeID1} and placeID2 = #{placeID2}
+</select>
+<select id="listTwoPlace" resultType="TwoPlace">
+select 
+	TwoPlaceSeq
+	,placeID1
+	,placeID2
+from TwoPlace
+</select>
+
+</mapper>

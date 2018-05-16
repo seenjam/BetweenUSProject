@@ -9,6 +9,10 @@
 	<typeAliases>
 		 <typeAlias type="VO.MemberVO" alias="Member" /> 
 		 <typeAlias type="VO.PlaceVO" alias="Place"/>
+		 <typeAlias type="VO.FriendVO" alias = "Friend"/>
+		 <typeAlias type="VO.TwoPlaceVO" alias="TwoPlace"/> 
+		 <typeAlias type="VO.TestPlaceVO" alias = "TestPlaceVO"/>
+		 <typeAlias type="VO.FavoriteVO" alias="Favorite"/>  
 		 <!-- ★★★★★VO가 늘어나면 이부분을 늘려준다!!!!!!!!!!!!!!!!!!★★★★★ --> 
  	<!--- <typeAlias type="VO.ChickenVO" alias="Chicken" />   -->
  <!--- <typeAlias type="VO.ChickenVO" alias="Chicken" />   -->
@@ -34,6 +38,9 @@
 	<mappers>
 	<mapper resource="MemberMapper.xml" /> <!--★★★★★시험에서 이 부분 적어줘야함 ★★★★★-  -->
 	<mapper resource="PlaceMapper.xml"/>
+	<mapper resource="FriendMapper.xml"/>
+	 <mapper resource="TwoPlaceMapper.xml"/>
+	  <mapper resource="FavoriteMapper.xml"/>  
 	</mappers>
 	
 </configuration>

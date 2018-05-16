@@ -19,6 +19,28 @@
 insert into Place(placeID,placeName,placeLon,placeLat)
 values(#{placeID},#{placeName},#{placeLon},#{placeLat})
 </insert>
-
+<select id = "selectPlace" parameterType = "String" resultType="Place">
+select 
+	placeID
+	,placeName
+	,placeLon
+	,placeLat
+from 
+	Place
+where placeID = #{placeID}
+</select>
+<select id="placeIDCheck" parameterType = "String" resultType="int">
+select count(*)
+from Place
+where placeID = #{placeID}
+</select>
+<select id="listPlace" resultType="Place">
+select 
+	placeID
+	,placeName
+	,placeLon
+	,placeLat
+from Place
+</select>
 
 </mapper>
