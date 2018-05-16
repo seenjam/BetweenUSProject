@@ -22,43 +22,42 @@ import VO.CategoryRadiusPlace;
 import VO.PlaceVO;
 
 public class AroundPlaceUI extends JDialog implements ActionListener,ListSelectionListener{
-	private JList aroundPlace_list; // around places list
-	private JComboBox category_combo,radius_combo; //  comboBox of category, radius 
-	private JButton aroundTable_btn; //ī�װ� ,�ݰ濡 ����  �ֺ� ã�� ��ư
-	private JLabel googleMap; 		// ī�װ�, �ݰ濡 ���� ����
-	private String columnNames[]= {"��Ҹ�","�ּ�","��ȭ��ȣ","�浵","����"};
-	private JButton mapZoonIn_btn,mapZoonOut_btn;
+	private JList aroundPlace_list; //검색어에 따른 값들을 table에 넣어준다. 
+	private JComboBox category_combo,radius_combo; // 카테고리 콤보박스 ,반경 콤보박스
+	private JButton aroundTable_btn; //카테고리 ,반경에 따른  주변 찾기 버튼
+	private JLabel googleMap; 		// 카테고리, 반경에 따른 지도
+	private String columnNames[]= {"장소명","주소","전화번호","경도","위도"};private JButton mapZoonIn_btn,mapZoonOut_btn;
 	private AroundPlaceDAO aroundPlaceDAO = new AroundPlaceDAO();
 	private String location;
 	private JLabel firstPlace_lb,secondPlace_lb,middlePlaceLon_lb,middlePlaceLat_lb; //���������ֱ��/.// ��������!
 
 	public AroundPlaceUI(String[] middlePlaceInfoArray) {
 		
-		setPostAroundPlaceArray(middlePlaceInfoArray); //�߰���ġ�� ������ set (ù��°���, �ι�°���,lon�浵 ,lat����)
-		aroundPlaceDAO.setCategory_map(); //ī�װ� ���� set (����ö��, ī��, ������ ���)
+		setPostAroundPlaceArray(middlePlaceInfoArray); //중간위치의 정보를 set (첫번째장소, 두번째장소,lon경도 ,lat위도)
+		aroundPlaceDAO.setCategory_map(); //카테고리 예시 set (지하철역, 카페, 음식점 등등)
 		
 		setSize(1220, 640);
 		getContentPane().setLayout(null);
 		
-		firstPlace_lb = new JLabel("ù��°���");
+		firstPlace_lb = new JLabel("FirstPlace");
 		firstPlace_lb.setBounds(59, 47, 306, 18);
 		getContentPane().add(firstPlace_lb);
 		firstPlace_lb.setText(getPostAroundPlaceArray()[0]);
 		
 		
-		secondPlace_lb = new JLabel("�ι�° ���");
+		secondPlace_lb = new JLabel("SecondPlace");
 		secondPlace_lb.setBounds(59, 77, 326, 18);
 		getContentPane().add(secondPlace_lb);
 		secondPlace_lb.setText(getPostAroundPlaceArray()[1]);
 
 		
-		middlePlaceLon_lb = new JLabel("�߰���ġ�� �浵 LON");
+		middlePlaceLon_lb = new JLabel("MiddlePlace LON");
 		middlePlaceLon_lb.setBounds(59, 107, 326, 18);
 		getContentPane().add(middlePlaceLon_lb);
 		middlePlaceLon_lb.setText(getPostAroundPlaceArray()[2]);
 		
 		
-		middlePlaceLat_lb = new JLabel("�߰� ��ġ�� ���� LAT");
+		middlePlaceLat_lb = new JLabel("MiddlePlace LAT");
 		middlePlaceLat_lb.setBounds(59, 138, 326, 18);
 		getContentPane().add(middlePlaceLat_lb);
 		middlePlaceLat_lb.setText(getPostAroundPlaceArray()[3]);
@@ -97,8 +96,8 @@ public class AroundPlaceUI extends JDialog implements ActionListener,ListSelecti
 		JScrollPane scrollPane_1 = new JScrollPane(aroundPlace_list);
 		scrollPane_1.setBounds(33, 285, 392, 277);
 		getContentPane().add(scrollPane_1);
-		//�ѹ��� �� �׸� ������ �� �ִ� ���� ����Ʈ�� ���
-		aroundPlace_list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);//�ѹ��� �� �׸� ������ �� �ִ� ���� ����Ʈ�� ���
+		//한번에 한 항목만 선택할 수 있는 모드로 리스트를 사용
+		aroundPlace_list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);//한번에 한 항목만 선택할 수 있는 모드로 리스트를 사용
 		//add(new JScrollPane(firstSearchPlace_list));
 		aroundPlace_list.addListSelectionListener(this);
 		
@@ -125,8 +124,8 @@ public class AroundPlaceUI extends JDialog implements ActionListener,ListSelecti
 		// TODO Auto-generated method stub
 		if(e.getSource() ==aroundTable_btn) {
 			
-			System.out.println("getPostAroundPlaceArray()[2] : "+ getPostAroundPlaceArray()[2]); //lon,�浵
-			System.out.println("getPostAroundPlaceArray()[3] : "+ getPostAroundPlaceArray()[3]); //lat,����
+			System.out.println("getPostAroundPlaceArray()[2] : "+ getPostAroundPlaceArray()[2]); //lon,경도
+			System.out.println("getPostAroundPlaceArray()[3] : "+ getPostAroundPlaceArray()[3]); //lat, 위도
 			System.out.println("category_combo.getSelectedItem() : " + category_combo.getSelectedItem());
 			System.out.println("category_combo.getvALUE() : " + aroundPlaceDAO.getCategory_map().get(category_combo.getSelectedItem()));
 			System.out.println("radius_combo.getSelectedItem() : " + radius_combo.getSelectedItem());
@@ -151,14 +150,14 @@ public class AroundPlaceUI extends JDialog implements ActionListener,ListSelecti
 		}
 	}
 	
-	//���� �����ѰͿ� ���� json ������ table�� ����! 
+	//지금 질문한것에 대한 json 값들을 table에 셋팅! 
 	public void setPostAroundPlaceArray(String[] middlePlaceInfoArray) {
 		// TODO Auto-generated method stub
 		aroundPlaceDAO.setPostAroundPlace(middlePlaceInfoArray);
 
 	}
 	public String[] getPostAroundPlaceArray() {
-		//����: ù��°���, �ι�°���, Lon(�浵) , Lat(����)
+		//순서: 첫번째장소, 두번째장소, Lon(경도) , Lat(위도)
 		return aroundPlaceDAO.getPostAroundPlace();
 	}
 	
@@ -169,33 +168,33 @@ public class AroundPlaceUI extends JDialog implements ActionListener,ListSelecti
 		if(!e.getValueIsAdjusting()) {
 			
 			if(e.getSource() == aroundPlace_list&&aroundPlace_list.getSelectedIndex()!=-1) {
-				//���õ� ���� SearchPlace VO�� ����
-				System.out.println("�̰� ���´ٸ� list�� ��������ʾҴµ��� ���� �����°���.");
+				//선택된 값을 SearchPlace VO에 넣음
+				System.out.println("이게 나온다면 list를 출력하지않았는데도 요기로 들어오는것임.");
 				CategoryRadiusPlace categoryRadiusPlace = (CategoryRadiusPlace)aroundPlace_list.getSelectedValue();
 				location = categoryRadiusPlace.getLat()+","+categoryRadiusPlace.getLon();
-				//���� ����
+				//지도 생성
 				listClickSetMap(location,aroundPlaceDAO.valueZoom(9));
-				//ũ��������
+				//크기재지정
 				setSize(1220, 640);
 				
 				aroundPlaceDAO.zoom=11;
-				//secondSearchPlace_list�� �����ϰ� �ٽ� firstSearchPlace_list�� ������ �� �ٽ� ���� �����ֱ� ����
+				//secondSearchPlace_list를 선택하고 다시 firstSearchPlace_list를 선택할 때 다시 지도 보여주기 위해
 				System.out.println(categoryRadiusPlace);
 				
 			}
 		}
 	}
 
-	//������ googleMap�� Ȯ��, ��ҽ� ��� 
+	//설정된 googleMap을 확대, 축소시 사용 
 	public void zoomSetMap(String location,int zoom) {
-		aroundPlaceDAO.zoomDownloadMap(location,zoom);
-		googleMap.setIcon(aroundPlaceDAO.getMap(location,zoom));
-		aroundPlaceDAO.fileDelete(location+""+zoom);
+			aroundPlaceDAO.zoomDownloadMap(location,zoom);
+			googleMap.setIcon(aroundPlaceDAO.getMap(location,zoom));
+			aroundPlaceDAO.fileDelete(location+""+zoom);
 	}
-	//�ּ�list�� Ŭ���Ͽ� googleMap�� ������ �� ���
+	//주소list를 클릭하여 googleMap을 설정할 때 사용
 	public void listClickSetMap(String location,int zoom) {
-		aroundPlaceDAO.listClickdownloadMap(location,zoom);
-		googleMap.setIcon(aroundPlaceDAO.getMap(location,zoom));
-		aroundPlaceDAO.fileDelete(location+""+zoom);
+			aroundPlaceDAO.listClickdownloadMap(location,zoom);
+			googleMap.setIcon(aroundPlaceDAO.getMap(location,zoom));
+			aroundPlaceDAO.fileDelete(location+""+zoom);
 	}
 }

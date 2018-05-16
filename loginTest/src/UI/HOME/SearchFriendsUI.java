@@ -44,10 +44,11 @@ public class SearchFriendsUI extends JDialog implements ActionListener, ListSele
 
 	private MemberVO selectedFriend = null;
 	boolean isChanging =false;
-	String favFriend ="";		// �����ؼ� ģ���߰��� ȸ���� ��������
+	String favFriend ="";		// 선택해서 친구추가된 회원의 정보저장
 	private MemberMain mm = new MemberMain();
 	private JList friend_list;/*=new JList();*/
-	private MemberVO myInfo = null;	// ������
+	private MemberVO myInfo = null;// 내정보
+	
 	
 
 
@@ -88,8 +89,8 @@ public class SearchFriendsUI extends JDialog implements ActionListener, ListSele
 		searchedFriend_list = new JList();
 		searchedFriend_list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		scrollPane.setViewportView(searchedFriend_list);
-		searchedFriend_list.addListSelectionListener(this);//����Ʈ�� Ŭ���Ǹ�
-
+		searchedFriend_list.addListSelectionListener(this);//리스트가 클릭되면
+		
 		error_lb = new JLabel("");
 		error_lb.setForeground(Color.RED);
 		error_lb.setHorizontalAlignment(SwingConstants.CENTER);
@@ -98,14 +99,14 @@ public class SearchFriendsUI extends JDialog implements ActionListener, ListSele
 
 		searchById_rbtn = new JRadioButton("id\uB85C \uAC80\uC0C9");
 		searchById_rbtn.setSelected(true);
-		searchById_rbtn.setActionCommand("idã��");
+		searchById_rbtn.setActionCommand("id찾기");
 		searchById_rbtn.setBounds(39, 52, 82, 23);
 		getContentPane().add(searchById_rbtn);
 		searchById_rbtn.addActionListener(this);
 
 		searchByName_rbtn = new JRadioButton("\uC774\uB984\uC73C\uB85C \uAC80\uC0C9");
 		searchByName_rbtn.setBounds(125, 52, 127, 23);
-		searchByName_rbtn.setActionCommand("�̸�ã��");
+		searchByName_rbtn.setActionCommand("이름찾기");
 		getContentPane().add(searchByName_rbtn);
 		searchByName_rbtn.addActionListener(this);
 
@@ -115,8 +116,6 @@ public class SearchFriendsUI extends JDialog implements ActionListener, ListSele
 		setVisible(false);
 
 	}
-
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -131,14 +130,14 @@ public class SearchFriendsUI extends JDialog implements ActionListener, ListSele
 			searchFriend_tf.setText("");
 			if (choosenBtn.equals("idã��")) {
 				//searchFriend_tf.setText("");
-				// ��ĭ�� ��� �����޼���
+				// 빈칸인 경우 오류메세지
 				if (searchingFriendID.equals("")) {
 					error_lb.setForeground(Color.red);
-					error_lb.setText("�� ĭ�Դϴ�!");
+					error_lb.setText("빈 칸입니다!");
 				} else {
-					if (dao.searchFriendByIDCount(searchingFriendID) == 0) { // �˻��� ģ���� �������� ���� ��� �����޼���
+					if (dao.searchFriendByIDCount(searchingFriendID) == 0) {  // 검색한 친구가 존재하지 않을 경우 오류메세지
 						error_lb.setForeground(Color.red);
-						error_lb.setText("�������� �ʴ� ���̵��Դϴ�!");
+						error_lb.setText("존재하지 않는 아이디입니다!");
 
 					} else {
 						//ArrayList<MemberVO> mlist = new ArrayList<>();
@@ -149,25 +148,25 @@ public class SearchFriendsUI extends JDialog implements ActionListener, ListSele
 							searchedFriend_list.setListData(ilist.toArray());
 					//	}
 						error_lb.setForeground(Color.BLACK);
-						error_lb.setText("�߰��� ģ���� Ŭ�����ּ���.");
+						error_lb.setText("추가할 친구를 클릭해주세요.");
 					}
 				}
 
 			}
 
-			else if(choosenBtn.equals("�̸�ã��")){
+			else if(choosenBtn.equals("이름찾기")){
 				//searchFriend_tf.setText("");
 				//String searchingFriendName = searchFriend_tf.getText();
 
 				if (e.getSource() == searchFriend_btn) {
-					// ��ĭ�� ��� �����޼���
+					// 빈칸인 경우 오류메세지
 					if (searchingFriendName.equals("")) {
 						error_lb.setForeground(Color.red);
-						error_lb.setText("�� ĭ�Դϴ�!");
+						error_lb.setText("빈칸입니다!");
 					} else {
 						if (dao.searchFriendByNameCount(searchingFriendName) == 0) { 
 							error_lb.setForeground(Color.red);
-							error_lb.setText("�������� �ʴ� �̸��Դϴ�!");
+							error_lb.setText("존재하지 않는 이름입니다!");
 						} else {
 							//ArrayList<MemberVO> mlist = new ArrayList<>();
 							nlist = dao.searchFriendByNameList(searchingFriendName);
@@ -177,7 +176,7 @@ public class SearchFriendsUI extends JDialog implements ActionListener, ListSele
 								searchedFriend_list.setListData(nlist.toArray());
 						//	}
 							error_lb.setForeground(Color.BLACK);
-							error_lb.setText("�߰��� ģ���� Ŭ�����ּ���.");
+							error_lb.setText("추가할 친구를 클릭해주세요.");
 						}
 					}
 				}
