@@ -4,20 +4,27 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import DAO.MemberDAO;
+import DAO.SearchTwoPlaceDao;
 import Main.MemberMain;
 import VO.MemberVO;
+import VO.PlaceVO;
 
-public class MemberUI extends JDialog implements ActionListener {
+public class MemberUI extends JDialog implements ActionListener , ListSelectionListener {
 	private JTextField memId_tf; 
 	private JTextField memName_tf;
 	private JTextField memAddr_tf;
@@ -37,9 +44,12 @@ public class MemberUI extends JDialog implements ActionListener {
 	
 	private JLabel explainId_lb;		//아이디 기입 설명 (5자리 이상)
 	private JLabel explainPw_lb;		//비밀번호와 비밀번호확인 비교 설명
-
+	private JLabel explainAddr_lb;
 	private MemberDAO memDao;
 	private MemberMain memMain = new MemberMain();
+	
+	private String memPlace; //list에서 선택된 주소 placeVO의 이름
+	private JList addressList; // 주소 검색 list 
 
 	public MemberUI() {
 		memDao = new MemberDAO();
@@ -91,7 +101,7 @@ public class MemberUI extends JDialog implements ActionListener {
 		memAddr_tf.setBounds(108, 243, 116, 21);
 		memAddr_tf.setText("");
 		getContentPane().add(memAddr_tf);
-		memAddr_tf.setColumns(10);
+		memAddr_tf.setColumns(15);
 
 		memAddr_lb = new JLabel("\uC8FC\uC18C");
 		memAddr_lb.setBounds(28, 246, 57, 15);
@@ -103,12 +113,12 @@ public class MemberUI extends JDialog implements ActionListener {
 		memAddrSearch_btn.addActionListener(this);
 
 		memInsert_btn = new JButton("\uC644\uB8CC");
-		memInsert_btn.setBounds(108, 318, 97, 23);
+		memInsert_btn.setBounds(106, 418, 97, 23);
 		getContentPane().add(memInsert_btn);
 		memInsert_btn.addActionListener(this);
 
 		memBack_btn = new JButton("\uCDE8\uC18C");
-		memBack_btn.setBounds(251, 318, 97, 23);
+		memBack_btn.setBounds(250, 418, 97, 23);
 		getContentPane().add(memBack_btn);
 		memBack_btn.addActionListener(this);
 
@@ -133,6 +143,19 @@ public class MemberUI extends JDialog implements ActionListener {
 		memPwCheck_tf.setBounds(133, 158, 148, 23);
 		memPwCheck_tf.setText("");
 		getContentPane().add(memPwCheck_tf);
+		
+		
+		addressList = new JList();
+		JScrollPane scrollPane = new JScrollPane(addressList);
+		scrollPane.setViewportView(addressList);
+		scrollPane.setBounds(108, 276, 271, 107);
+		addressList.addListSelectionListener(this);
+		getContentPane().add(scrollPane);
+		
+		explainAddr_lb = new JLabel();
+		explainAddr_lb.setBounds(108, 388, 62, 18);
+		getContentPane().add(explainAddr_lb);
+		
 		setVisible(false);
 
 	}
@@ -148,12 +171,17 @@ public class MemberUI extends JDialog implements ActionListener {
 		if (e.getSource() == memIdCheck_btn) { // 아이디 중복검사
 
 			if (memId_tf.getText().equals("")) { // 빈칸일때
+				
 				explainId_lb.setText("아이디를 입력해주세요.");
 			} else {
+				
+				
 				if (memId_tf.getText().length() < 5) { // 아이디가 5자리 아래일 때
 					explainId_lb.setForeground(Color.RED);
 					explainId_lb.setText("5자리 이상 입력해주세요!");
 				} else {
+					
+					
 					if (memDao.IDcheck(id) == 0) { // IDcheck==true라면
 						// id = memId_tf.getText();
 						String name = memName_tf.getText();
@@ -174,7 +202,15 @@ public class MemberUI extends JDialog implements ActionListener {
 			}
 
 		}
-
+		//주소검색 버튼 클릭시 
+		if(e.getSource() == memAddrSearch_btn) {
+			String memAddr = memAddr_tf.getText();
+			SearchTwoPlaceDao  searchTwoPlaceDao = new SearchTwoPlaceDao();
+			ArrayList<PlaceVO> addr_alist = searchTwoPlaceDao.receivekakaoMapAPI(memAddr);
+			if(addr_alist!=null) {
+				addressList.setListData(addr_alist.toArray());
+			}
+		}
 		 //회원가입 완료버튼 클릭 시
 		if (e.getSource() == memInsert_btn) {
 			if(memId_tf.getText().equals("") || password22.equals("") || password11.equals("")
@@ -187,24 +223,30 @@ public class MemberUI extends JDialog implements ActionListener {
 				} else {
 					explainPw_lb.setForeground(Color.black);
 					explainPw_lb.setText("비밀번호확인 성공");
-					
-					if (explainId_lb.getText().equals("사용가능한 아이디입니다.")) {
-						String name = memName_tf.getText();
-						String address = memAddr_tf.getText();
-
-						MemberVO vo = new MemberVO();
-						vo.setMemID(id);
-						vo.setMemPW(password11);
-						vo.setMemName(name);
-						vo.setMemAddress(address);
-						vo.setMemState("0"); //state 0: 로그오프  , 1: 로그인
-						memDao.insertMember(vo);
-						JOptionPane.showMessageDialog(null, "회원이 되신 것을 환영합니다!");
-						memMain.showLogin();
-					} else if(!explainId_lb.getText().equals("사용가능한 아이디입니다.")){
-						JOptionPane.showMessageDialog(null, "아이디 중복검사를 해주세요");
-					} else {
-						JOptionPane.showMessageDialog(null, "아이디를 다시 설정해주세요!");
+					if(explainAddr_lb.getText().equals("주소등록") && memPlace.equals(memAddr_tf.getText())) {
+							if (explainId_lb.getText().equals("사용가능한 아이디입니다.")) {
+								String name = memName_tf.getText();
+								String address = memAddr_tf.getText();
+		
+								MemberVO vo = new MemberVO();
+								vo.setMemID(id);
+								vo.setMemPW(password11);
+								vo.setMemName(name);
+								vo.setMemAddress(address);
+								vo.setMemState("0"); //state 0: 로그오프  , 1: 로그인
+								memDao.insertMember(vo);
+								JOptionPane.showMessageDialog(null, "회원이 되신 것을 환영합니다!");
+								memMain.showLogin();
+							} else if(!explainId_lb.getText().equals("사용가능한 아이디입니다.")){
+								
+								JOptionPane.showMessageDialog(null, "아이디 중복검사를 해주세요");
+								
+							} else {
+								JOptionPane.showMessageDialog(null, "아이디를 다시 설정해주세요!");
+							}
+					}else {
+						
+						JOptionPane.showMessageDialog(null,memPlace+memAddr_tf.getText()+"주소를 제대로 입력해주세요!");
 					}
 				}
 			}
@@ -216,5 +258,21 @@ public class MemberUI extends JDialog implements ActionListener {
 			memMain.showLogin();
 		}
 
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO Auto-generated method stub
+		if(!e.getValueIsAdjusting()) {
+			
+			if(e.getSource() == addressList && addressList.getSelectedIndex() != -1) {
+				
+				memPlace = ((PlaceVO) addressList.getSelectedValue()).getPlaceName();
+				System.out.println(memPlace);
+				memAddr_tf.setText(memPlace);
+				explainAddr_lb.setText("주소등록");
+			}
+				
+		}
 	}
 }
