@@ -2,6 +2,7 @@ package DAO;
 
 import java.util.ArrayList;
 
+import VO.FriendVO;
 import VO.MemberVO;
 
 public interface MemberMapper {
@@ -20,4 +21,9 @@ public interface MemberMapper {
 	public MemberVO searchFriendByName(String name);
 	public MemberVO searchFriendByID(String id);
 	public MemberVO MyInfo(String id);
+	public void settingfriends(FriendVO fv);
+	public void settingBetweenFriends(FriendVO fv);
+	public ArrayList<String> findingMyFriendsID(String myID);
+	public MemberVO findingMyFriend(String id);
+	public ArrayList<String> friendsCheck(String myID);
 }

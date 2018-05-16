@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import VO.FriendVO;
 import VO.MemberVO;
 
 public class MemberDAO {
@@ -231,5 +232,101 @@ public class MemberDAO {
 		return mem;
 	}
 	
+	public void settingfriends(FriendVO fv) {			//searchFriendsUI에서 새로운 친구들
+		SqlSession session = null;
+		try {
+			session = factory.openSession();
+			MemberMapper mapper = session.getMapper(MemberMapper.class);
+			mapper.settingfriends(fv);
+			session.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			session.close();
+		}
+	}
+	
+	public void settingBetweenFriends(FriendVO fv) {			//searchFriendsUI에서 새로운 친구들
+		SqlSession session = null;
+		try {
+			session = factory.openSession();
+			MemberMapper mapper = session.getMapper(MemberMapper.class);
+			mapper.settingBetweenFriends(fv);
+			session.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			session.close();
+		}
+	}
+	
+	public ArrayList<String> findingMyFriendsID(String myID)   {					//FriendUI에서 원래 저장되어있던 친구목록 부르는거
+		SqlSession session = null;
+		ArrayList<String> friendsID =new ArrayList<>();
+		//MemberVO mem = null;
+		try {
+			session = factory.openSession();
+			MemberMapper mapper = session.getMapper(MemberMapper.class);
+
+			friendsID = mapper.findingMyFriendsID(myID);
+			session.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			session.close();
+		}
+		return friendsID;
+
+	}
+	
+	public MemberVO findingMyFriend(String id) {
+		SqlSession session = null;
+		//String friendsID =null;
+		MemberVO f = null;
+		try {
+			session = factory.openSession();
+			MemberMapper mapper = session.getMapper(MemberMapper.class);
+
+			f = mapper.findingMyFriend(id);
+			session.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			session.close();
+		}
+		return f;
+	}
+	
+	public ArrayList<String> friendsCheck(String myID) {
+		
+	
+		ArrayList<String> anotherID =new ArrayList<>();
+		SqlSession session = null;
+		try {
+			session = factory.openSession();
+			MemberMapper mapper = session.getMapper(MemberMapper.class);
+
+			anotherID = mapper.friendsCheck(myID);
+			session.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			session.close();
+		}
+
+		return anotherID;
+	}
+	
+
 
 }
