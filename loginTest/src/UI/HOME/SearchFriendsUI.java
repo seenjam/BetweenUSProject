@@ -128,7 +128,7 @@ public class SearchFriendsUI extends JDialog implements ActionListener, ListSele
         
 		if (e.getSource() == searchFriend_btn) {
 			searchFriend_tf.setText("");
-			if (choosenBtn.equals("idã��")) {
+			if (choosenBtn.equals("id찾기")) {
 				//searchFriend_tf.setText("");
 				// 빈칸인 경우 오류메세지
 				if (searchingFriendID.equals("")) {
