@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import DAO.AroundPlaceDAO;
 import VO.CategoryRadiusPlace;
 import VO.PlaceVO;
+import java.awt.Color;
 
 public class AroundPlaceUI extends JDialog implements ActionListener,ListSelectionListener{
 	private JList aroundPlace_list; //검색어에 따른 값들을 table에 넣어준다. 
@@ -32,33 +33,34 @@ public class AroundPlaceUI extends JDialog implements ActionListener,ListSelecti
 	private JLabel firstPlace_lb,secondPlace_lb,middlePlaceLon_lb,middlePlaceLat_lb; //���������ֱ��/.// ��������!
 
 	public AroundPlaceUI(String[] middlePlaceInfoArray) {
+		getContentPane().setBackground(Color.WHITE);
 		
 		setPostAroundPlaceArray(middlePlaceInfoArray); //중간위치의 정보를 set (첫번째장소, 두번째장소,lon경도 ,lat위도)
 		aroundPlaceDAO.setCategory_map(); //카테고리 예시 set (지하철역, 카페, 음식점 등등)
 		
-		setSize(1220, 640);
+		setSize(1220, 630);
 		getContentPane().setLayout(null);
 		
 		firstPlace_lb = new JLabel("FirstPlace");
-		firstPlace_lb.setBounds(59, 47, 306, 18);
+		firstPlace_lb.setBounds(59, 47, 365, 18);
 		getContentPane().add(firstPlace_lb);
 		firstPlace_lb.setText(getPostAroundPlaceArray()[0]);
 		
 		
 		secondPlace_lb = new JLabel("SecondPlace");
-		secondPlace_lb.setBounds(59, 77, 326, 18);
+		secondPlace_lb.setBounds(59, 82, 365, 18);
 		getContentPane().add(secondPlace_lb);
 		secondPlace_lb.setText(getPostAroundPlaceArray()[1]);
 
 		
 		middlePlaceLon_lb = new JLabel("MiddlePlace LON");
-		middlePlaceLon_lb.setBounds(59, 107, 326, 18);
+		middlePlaceLon_lb.setBounds(59, 123, 365, 18);
 		getContentPane().add(middlePlaceLon_lb);
 		middlePlaceLon_lb.setText(getPostAroundPlaceArray()[2]);
 		
 		
 		middlePlaceLat_lb = new JLabel("MiddlePlace LAT");
-		middlePlaceLat_lb.setBounds(59, 138, 326, 18);
+		middlePlaceLat_lb.setBounds(59, 158, 365, 18);
 		getContentPane().add(middlePlaceLat_lb);
 		middlePlaceLat_lb.setText(getPostAroundPlaceArray()[3]);
 
@@ -71,7 +73,7 @@ public class AroundPlaceUI extends JDialog implements ActionListener,ListSelecti
 			category_combo.addItem(s.getKey());
 			System.out.println(s.getKey());
 		}
-		category_combo.setBounds(56, 201, 96, 24);
+		category_combo.setBounds(229, 201, 96, 24);
 		getContentPane().add(category_combo);
 		
 		
@@ -79,11 +81,11 @@ public class AroundPlaceUI extends JDialog implements ActionListener,ListSelecti
 		for(int r : aroundPlaceDAO.getRadius()) {
 			radius_combo.addItem(r);
 		}
-		radius_combo.setBounds(166, 201, 85, 24);
+		radius_combo.setBounds(339, 201, 85, 24);
 		getContentPane().add(radius_combo);
 		
 		aroundTable_btn = new JButton("Search");
-		aroundTable_btn.setBounds(59, 237, 105, 27);
+		aroundTable_btn.setBounds(320, 246, 105, 27);
 		getContentPane().add(aroundTable_btn);
 		aroundTable_btn.addActionListener(this);
 		
@@ -103,7 +105,7 @@ public class AroundPlaceUI extends JDialog implements ActionListener,ListSelecti
 		
 		
 		googleMap = new JLabel();
-		googleMap.setBounds(447, 47, 666, 502);
+		googleMap.setBounds(469, 47, 644, 502);
 		getContentPane().add(googleMap);
 		
 		mapZoonIn_btn = new JButton("+");

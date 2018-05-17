@@ -18,6 +18,7 @@ import VO.MemberVO;
 import VO.PlaceVO;
 
 import javax.swing.JButton;
+import java.awt.Color;
 
 public class FavoriteUI extends JPanel implements ActionListener, ListSelectionListener{
 	private JPanel favoritePanel;
@@ -28,36 +29,36 @@ public class FavoriteUI extends JPanel implements ActionListener, ListSelectionL
 	private JButton btnNewButton;
 	private MemberVO myInfo = null;
 	public FavoriteUI(MemberVO mem) {
+		setBackground(Color.WHITE);
 		setSize(1220, 640);
 		setLayout(null);
 		
 		this.myInfo = mem;
 		
 		favoritePanel = new JPanel();
+		favoritePanel.setBackground(Color.WHITE);
 		favoritePanel.setBounds(14, 30, 881, 513);
 		add(favoritePanel);
 		favoritePanel.setLayout(null);
 		
-		/*
-		JScrollPane scrollpane = new JScrollPane();
-		panel.add(scrollpane);*/
-		
+
+		 FavoriteListValueVO_aList = favoriteDao.favoriteListValueSQL(myInfo.getMemID());
+			for (int i = 0; i < FavoriteListValueVO_aList.size(); i++) {
+				System.out.println(FavoriteListValueVO_aList.get(i));
+			}
+
 		JScrollPane scrollpane = new JScrollPane();
 		favorite_list = new JList();
 		
-		
+	    favorite_list.setListData(FavoriteListValueVO_aList.toArray());
+			
 		scrollpane.setViewportView(favorite_list);
 		favoritePanel.add(scrollpane);
-		scrollpane.setBounds(58, 60, 784, 386);
+		scrollpane.setBounds(63, 103, 784, 386);
 
 		
-		/*favorite_aList = favoriteDao.listFavorite();
-		for (int i = 0; i < favorite_aList.size(); i++) {
-			System.out.println(favorite_aList.get(i).getTwoPlaceSeq());
-		}*/
-		
 		btnNewButton = new JButton("새로고침");
-		btnNewButton.setBounds(58, 21, 105, 27);
+		btnNewButton.setBounds(742, 55, 105, 27);
 		btnNewButton.addActionListener(this);
 		favoritePanel.add(btnNewButton);
 		

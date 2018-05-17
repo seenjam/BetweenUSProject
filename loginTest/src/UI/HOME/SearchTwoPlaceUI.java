@@ -51,23 +51,24 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 	private SearchTwoPlaceDao searchTwoPlaceDao = new SearchTwoPlaceDao(); 
 	private FavoriteDAO favoriteDao = new FavoriteDAO();
 	public SearchTwoPlaceUI(MemberVO mem) {
+		setBackground(Color.WHITE);
 		setSize(1220, 640);
 		this.myInfo = mem;
 		
 		//gogJTabbedPane
 		
 		JLabel first_lb = new JLabel("Place1");
-		first_lb.setBounds(14, 80, 42, 30);
+		first_lb.setBounds(14, 80, 75, 30);
 		searchTwoPlaceUIPanel.add(first_lb);
 		
 		JLabel second_lb = new JLabel("Place2");
-		second_lb.setBounds(14, 213, 42, 30);
+		second_lb.setBounds(14, 213, 58, 30);
 		searchTwoPlaceUIPanel.add(second_lb);
 		
 		//
-		searchTwoPlaceUIPanel.setLocation(87, 42);
+		searchTwoPlaceUIPanel.setLocation(34, 10);
 		searchTwoPlaceUIPanel.setBackground(Color.WHITE);
-		searchTwoPlaceUIPanel.setSize(372, 558);
+		searchTwoPlaceUIPanel.setSize(425, 558);
 		searchTwoPlaceUIPanel.setLayout(null);
 		
 		//
@@ -86,11 +87,11 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		searchTwoPlaceUIPanel.add(secondSearchPlace_btn);
 		//searchTwoPlaceUIPanel.add(secondSearchPlace_list);
 		
-		firstSearchPlace_tf.setBounds(59, 80, 126, 30);
-		firstSearchPlace_btn.setBounds(210, 77, 84, 36);
+		firstSearchPlace_tf.setBounds(86, 80, 200, 30);
+		firstSearchPlace_btn.setBounds(300, 77, 84, 36);
 		firstSearchPlace_list.setBounds(58, 122, 236, 78);
-		secondSearchPlace_tf.setBounds(59, 213, 126, 30);
-		secondSearchPlace_btn.setBounds(210, 210, 84, 36);
+		secondSearchPlace_tf.setBounds(86, 213, 200, 30);
+		secondSearchPlace_btn.setBounds(300, 210, 84, 36);
 		secondSearchPlace_list.setBounds(59, 255, 236, 78);
 		
 
@@ -114,34 +115,34 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		scrollPane2.setViewportView(secondSearchPlace_list);
 		searchTwoPlaceUIPanel.add(scrollPane);
 		searchTwoPlaceUIPanel.add(scrollPane2);
-		scrollPane.setBounds(58, 122, 236, 78);
-		scrollPane2.setBounds(59, 255, 236, 78);
+		scrollPane.setBounds(86, 123, 296, 78);
+		scrollPane2.setBounds(86, 255, 298, 78);
 		//scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); //������ũ�Ѹ� ���
 		//scrollPane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		
 		favorite_btn = new JButton("Favorite");
-		favorite_btn.setBounds(34, 361, 105, 27);
+		favorite_btn.setBounds(86, 361, 119, 27);
 		favorite_btn.addActionListener(this);
 		searchTwoPlaceUIPanel.add(favorite_btn);
 		
 		middleSearch_btn = new JButton("Middle");
-		middleSearch_btn.setBounds(167, 361, 105, 27);
+		middleSearch_btn.setBounds(251, 361, 119, 27);
 		middleSearch_btn.addActionListener(this);
 		searchTwoPlaceUIPanel.add(middleSearch_btn);
 		
 	
 		
 		lblNewLabel_1 = new JLabel("firstPlace info");
-		lblNewLabel_1.setBounds(34, 414,200, 18);
+		lblNewLabel_1.setBounds(14, 414,356, 18);
 		searchTwoPlaceUIPanel.add(lblNewLabel_1);
 		
 		lblNewLabel_2 = new JLabel("secondPlace info");
-		lblNewLabel_2.setBounds(34, 447, 200, 30);
+		lblNewLabel_2.setBounds(14, 447, 356, 30);
 		searchTwoPlaceUIPanel.add(lblNewLabel_2);
 		
 		lblNewLabel_3 = new JLabel("Lat, Lon of middlePlace ");
-		lblNewLabel_3.setBounds(34, 480, 200, 50);
+		lblNewLabel_3.setBounds(14, 489, 356, 30);
 		searchTwoPlaceUIPanel.add(lblNewLabel_3);
 		
 		
@@ -153,7 +154,7 @@ public class SearchTwoPlaceUI extends JPanel implements ActionListener,ListSelec
 		
 		
 		searchAroundPlace = new JButton("Around");
-		searchAroundPlace.setBounds(34, 519, 105, 27);
+		searchAroundPlace.setBounds(265, 531, 105, 27);
 		searchAroundPlace.addActionListener(this);
 		searchTwoPlaceUIPanel.add(searchAroundPlace);
 		

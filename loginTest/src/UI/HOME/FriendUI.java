@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionListener;
 import DAO.MemberDAO;
 import Main.MemberMain;
 import VO.MemberVO;
+import java.awt.Color;
 
 public class FriendUI extends JPanel implements ActionListener, ListSelectionListener {
 	private JButton searchFriend_btn;
@@ -33,6 +34,7 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 	 private MemberVO friendInfo = null; // 내가 선택한 친구!!!!!!!!!!!!!! 중간값찾을 때도 이 변수 사용
 
 	 public FriendUI(MemberVO myInfo) {
+	 	setBackground(Color.WHITE);
 	  this.myInfo = myInfo;
 	  // myFriendsList.add(dao.settingMyFriend(myInfo.getMemID()));
 	  // friend_list.setListData(myFriendsList.toArray());
@@ -57,12 +59,12 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 	  friend_list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
 	  JScrollPane scrollPane = new JScrollPane();
-	  scrollPane.setBounds(63, 80, 238, 396);
+	  scrollPane.setBounds(65, 68, 297, 461);
 	  scrollPane.setViewportView(friend_list);
 	  add(scrollPane);
 
 	  searchFriend_btn = new JButton("\uCE5C\uAD6C\uCC3E\uAE30");
-	  searchFriend_btn.setBounds(337, 78, 164, 23);
+	  searchFriend_btn.setBounds(403, 100, 164, 23);
 	  add(searchFriend_btn);
 	  searchFriend_btn.addActionListener(this);
 
@@ -70,18 +72,16 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 	  friend_list.addListSelectionListener(this);
 
 	  chatting_btn = new JButton("\uC774\uCE5C\uAD6C\uC640\uCC44\uD305\uD558\uAE30");
-	  chatting_btn.setBounds(337, 138, 219, 23);
+	  chatting_btn.setBounds(403, 138, 164, 23);
 	  add(chatting_btn);
 	  chatting_btn.addActionListener(this);
 
 	  between_btn = new JButton("\uC774\uCE5C\uAD6C\uC640 \uC911\uAC04\uC9C0\uC810?");
-	  between_btn.setBounds(313, 193, 253, 23);
+	  between_btn.setBounds(403, 193, 163, 23);
 	  add(between_btn);
 	  between_btn.addActionListener(this);
 
-	  // myFriendsList.add(dao.settingMyFriend(myInfo.getMemID()));
-	  // System.out.println(dao.settingMyFriend(myInfo.getMemID()).getMemID());
-	  // friend_list.setListData(myFriendsList.toArray());
+	
 	  setVisible(true);
 	 }
 
@@ -95,14 +95,12 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 	 @Override
 	 public void actionPerformed(ActionEvent e) {
 	  if (e.getSource() == searchFriend_btn) {
-	   mm.showSearchFriend(friend_list, myInfo);
+		  	mm.showSearchFriend(friend_list, myInfo);
 	  }
 
 	  // ---------------------------------------------------------------------------------------친구와
 	  // 중간지점찾기 추가부분
 	  if (e.getSource() == between_btn) {
-	   //System.out.println(myInfo.getMemID());
-	   //System.out.println(friendInfo.getMemID());
 
 	  }
 	  // ------------------------------------------------------------------------------------------------
@@ -120,22 +118,6 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 	   }
 	 }
 
-	}
+}
 
-	// public void addFavoriteFriend() {
-
-	// myFriendsList.add(dao.settingMyFriend(myInfo.getMemID()));
-
-	// friend_list.setListData(myFriendsList.toArray());
-
-	// friend_list.setListData();
-
-	// favoriteFriend.add(selectedfriend);
-
-	// for (MemberVO vo : favoriteFriend) {
-
-	// }
-
-	// friend_list.setListData(favoriteFriend.toArray());
-
-	// }
+	

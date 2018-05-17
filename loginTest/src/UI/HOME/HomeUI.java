@@ -12,7 +12,7 @@ import javax.swing.event.ChangeListener;
 
 import VO.MemberVO;
 
-public class HomeUI extends JFrame implements ChangeListener{
+public class HomeUI extends JFrame {
 	
 	private SearchTwoPlaceUI searchTwoPlaceUI;
 	private FriendUI friendUI ;			// 친구 페이지
@@ -24,7 +24,8 @@ public class HomeUI extends JFrame implements ChangeListener{
 	MemberVO me=null;// = new MemberVO();
 
 
-	public HomeUI(MemberVO mem) {			// mem : 내정보
+	public HomeUI(MemberVO mem) {
+		getContentPane().setBackground(new Color(175, 238, 238));			// mem : 내정보
 		this.myInfo = mem;
 		
 		setSize(1350,800);
@@ -48,12 +49,12 @@ public class HomeUI extends JFrame implements ChangeListener{
 		JPanel panel_4 = new JPanel();
 		tabbedPane.addTab("ㅎㅇㅈㅂ~", null, panel_4, null);
 		
-		tabbedPane.addChangeListener(this);
+		//tabbedPane.addChangeListener(this);
 		myID_lb = new JLabel("");
+		myID_lb.setBounds(995, 31, 304, 25);
+		getContentPane().add(myID_lb);
 		myID_lb.setBackground(Color.WHITE);
 		myID_lb.setHorizontalAlignment(SwingConstants.CENTER);
-		myID_lb.setBounds(910, 24, 345, 18);
-		getContentPane().add(myID_lb);
 		myID_lb.setText(myInfo.getMemID()+" 회원님 환영합니다! ");
 
 
@@ -64,11 +65,13 @@ public class HomeUI extends JFrame implements ChangeListener{
 	}
 
 
-	@Override
+	/*@Override
 	public void stateChanged(ChangeEvent arg0) {
 		// TODO Auto-generated method stub
 		if (arg0.getSource() ==tabbedPane ) {
-			searchTwoPlaceUI = new SearchTwoPlaceUI(myInfo);
+			if(tabbedPane.getSelectedIndex()!=0) {
+				
+			}
 		}
-	}
+	}*/
 }
