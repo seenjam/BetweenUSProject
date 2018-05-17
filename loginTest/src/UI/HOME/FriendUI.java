@@ -34,6 +34,7 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 	private MemberVO friendInfo = null; // 내가 선택한 친구!!!!!!!!!!!!!! 중간값찾을 때도 이 변수 사용
 
 	public FriendUI(MemberVO myInfo) {
+		setBackground(Color.WHITE);
 		this.myInfo = myInfo;
 		// myFriendsList.add(dao.settingMyFriend(myInfo.getMemID()));
 		// friend_list.setListData(myFriendsList.toArray());
@@ -58,25 +59,25 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 		friend_list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(63, 80, 238, 396);
+		scrollPane.setBounds(149, 88, 520, 506);
 		scrollPane.setViewportView(friend_list);
 		add(scrollPane);
 
 		searchFriend_btn = new JButton("\uCE5C\uAD6C\uCC3E\uAE30");
-		searchFriend_btn.setBounds(337, 78, 164, 23);
+		searchFriend_btn.setBounds(752, 190, 108, 23);
 		add(searchFriend_btn);
 		searchFriend_btn.addActionListener(this);
 
 		friend_list.setListData(friendsInfo.toArray());
 		friend_list.addListSelectionListener(this);
 
-		chatting_btn = new JButton("\uC774\uCE5C\uAD6C\uC640\uCC44\uD305\uD558\uAE30");
+		/*chatting_btn = new JButton("\uC774\uCE5C\uAD6C\uC640\uCC44\uD305\uD558\uAE30");
 		chatting_btn.setBounds(337, 138, 219, 23);
 		add(chatting_btn);
-		chatting_btn.addActionListener(this);
+		chatting_btn.addActionListener(this);*/
 
 		between_btn = new JButton("\uC774\uCE5C\uAD6C\uC640 \uC911\uAC04\uC9C0\uC810?");
-		between_btn.setBounds(313, 193, 253, 23);
+		between_btn.setBounds(752, 246, 173, 23);
 		add(between_btn);
 		between_btn.addActionListener(this);
 
@@ -90,6 +91,7 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getSource() == friend_list) {
 			friendInfo = (MemberVO) friend_list.getSelectedValue(); // 선택한 리스트를 친구 정보에 담기
+			
 		}
 	}
 
@@ -102,12 +104,15 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 		// ---------------------------------------------------------------------------------------친구와
 		// 중간지점찾기 추가부분
 		if (e.getSource() == between_btn) {
-			//System.out.println(myInfo.getMemID());
-			//System.out.println(friendInfo.getMemID());
-
+			if(friendInfo!=null){
+					
+				FriendMiddleUI friendMiddleUI = new FriendMiddleUI(myInfo,friendInfo);
+				friendMiddleUI.setVisible(true);
+				
+			}
 		}
 		// ------------------------------------------------------------------------------------------------
-		if (e.getSource() == chatting_btn) {  // 친구와 채팅하기가 클릭되면
+/*		if (e.getSource() == chatting_btn) {  // 친구와 채팅하기가 클릭되면
 			if (friendInfo.getMemState().equals("1")) {
 				try {
 					mm.showChattingWindow(myInfo, friendInfo);
@@ -118,7 +123,7 @@ public class FriendUI extends JPanel implements ActionListener, ListSelectionLis
 			else {
 				JOptionPane.showMessageDialog(null, "로그아웃상태인 회원입니다!");
 			}
-			}
+		}*/
 	}
 
 }

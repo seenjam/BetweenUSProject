@@ -3,7 +3,9 @@ package Main;
 import javax.swing.JFrame;
 import javax.swing.JList;
 
-import com.wooriclient.ChatClientMain;
+import com.ChatClientMain;
+
+//import com.wooriclient.ChatClientMain;
 
 import DAO.MemberDAO;
 import UI.HOME.FriendUI;
@@ -75,7 +77,7 @@ public class MemberMain extends JFrame{
 	public void showChattingWindow(MemberVO myInfo, MemberVO friendInfo) {
 		//chatcClientMtry {
 		try {
-			ChatClientMain frame = new ChatClientMain(myInfo, friendInfo,"203.233.196.118", 3333);
+			ChatClientMain frame = new ChatClientMain(myInfo, friendInfo,"203.233.196.115", 3335);
 			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();

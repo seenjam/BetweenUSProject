@@ -45,10 +45,10 @@ public class HomeUI extends JFrame {
 		//JPanel panel_3 = new JPanel();
 		friendUI = new FriendUI(myInfo);
 		tabbedPane.addTab("친구목록", null, friendUI, null);
-		
+		/*
 		JPanel panel_4 = new JPanel();
 		tabbedPane.addTab("ㅎㅇㅈㅂ~", null, panel_4, null);
-		
+		*/
 		//tabbedPane.addChangeListener(this);
 		myID_lb = new JLabel("");
 		myID_lb.setBounds(995, 31, 304, 25);

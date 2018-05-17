@@ -81,6 +81,66 @@ public class SearchTwoPlaceDao {
 		return searchPlace_aList;
 
 	}
+	public PlaceVO friendMapAPI(String Searchplace) {
+		PlaceVO place = null; 
+		ArrayList<PlaceVO> searchPlace_aList = null; // 검색한 위치의 위치목록 (검색어 신사동의 위치목록 :강남구 신사동, 관악구 신사동 ...)
+		try {
+			URL obj = new URL("https://dapi.kakao.com/v2/local/search/address.json?query="
+					+ URLEncoder.encode(Searchplace, "UTF-8"));
+			
+			System.out.println(Searchplace);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setRequestProperty("Authorization", "KakaoAK b6ec5ff96d29443fdeb760fcbcf289ef");
+			int responseCode = con.getResponseCode();
+			System.out.println("응답 코드 : " + responseCode);
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuilder response = new StringBuilder();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			System.out.println("응답내용 : ");
+			System.out.println(response.toString());
+
+			JSONObject json = new JSONObject(response.toString());
+			JSONObject jsonMeta = json.getJSONObject("meta");
+			// JSONObject jsonDocuments = json.getJSONObject("documents");
+			JSONArray jsonDoucumentArray = (JSONArray) json.get("documents");
+			int searchCount = jsonMeta.getInt("total_count");
+			searchPlace_aList = new ArrayList<>();
+
+			// 한개 이상의 위치를 찾았을 때
+			if (searchCount != 0) {
+				for (int i = 0; i < searchCount; i++) {
+
+					JSONObject o = (JSONObject) jsonDoucumentArray.get(i);
+					String address_name = o.getString("address_name");
+					JSONObject o2 = o.getJSONObject("address");
+					String x = o2.getString("x"); // x:lon:경도
+					String y = o2.getString("y"); // y:lat:위도
+					PlaceVO sp = new PlaceVO(x + "" + y, address_name, x, y);// x:lon경도    // y:lat:위도
+					searchPlace_aList.add(sp);
+				}
+			} else {
+				System.out.println("not found.....");
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		for(PlaceVO p :searchPlace_aList) {
+			if(Searchplace.equals(p.getPlaceName())) {
+				place = p;
+			}
+		}
+		
+		System.out.println(place+"888888");
+		return place;
+
+	}
 
 	public int valueZoom(int inOut) {
 		// zoom 증가
