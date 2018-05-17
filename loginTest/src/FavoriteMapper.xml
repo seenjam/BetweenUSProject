@@ -21,11 +21,43 @@ select count(*)
 from Favorite
 where memID = #{memID} and twoPlaceSeq = #{twoPlaceSeq}
 </select>
+
+
 <select id="listFavorite" resultType="Favorite">
 select 
 	memID
 	,twoPlaceSeq
 from Favorite
 </select>
+
+
+<!-- 
+별칭값을 똑같이 만들어줘야함!! -->
+<select id="favoriteListValueSQL" parameterType = "String" resultType="FavoriteListValueVO">
+select 
+	c.placeName placename1, d.placeName placename2
+from 
+	Favorite a, TwoPlace b, Place c, Place d
+where 
+	a.TwoPlaceSeq = b.TwoPlaceSeq 
+	and  b.placeID1 = c.placeID
+	and  b.placeID2 = d.placeID
+	and  a.memID = #{memID}
+
+</select>
+
+ 
+<select id="test" parameterType = "String" resultType="FavoriteListValueVO">
+select
+	a.memID, a.memAddress
+from Member a 
+where a.memID= #{memID}
+</select>
+
+
+
+
+
+
 
 </mapper>

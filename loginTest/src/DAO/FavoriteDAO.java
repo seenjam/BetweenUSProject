@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import VO.FavoriteListValueVO;
 import VO.FavoriteVO;
-import VO.TestPlaceVO;
-import VO.TwoPlaceVO;
+import VO.MemberVO;
 
 public class FavoriteDAO {
 	private static SqlSessionFactory factory = MybatisConfig.getSqlSessionFactory();
@@ -72,4 +72,47 @@ public class FavoriteDAO {
 		 }
 		return favorite_alist;
 	}
+	public ArrayList<FavoriteListValueVO> favoriteListValueSQL(String memID){
+		SqlSession session = null;
+		ArrayList<FavoriteListValueVO> FavoriteListValueVO_aList = null;
+		try {
+				System.out.println(memID);
+				System.out.println("favoriteListValueSQL session made success");
+				session = factory.openSession();
+				FavoriteMapper mapper = session.getMapper(FavoriteMapper.class);
+				FavoriteListValueVO_aList = mapper.favoriteListValueSQL(memID);
+				for(FavoriteListValueVO d: FavoriteListValueVO_aList) {
+					System.out.println(d +"session");
+				}
+				session.commit();
+
+		 }catch(Exception e) {
+				e.printStackTrace();
+					
+		 }finally {
+				session.close();
+		 }
+		return FavoriteListValueVO_aList;
+	}
+	public MemberVO test(String memID) {
+		SqlSession session = null;
+		MemberVO m = null;
+		try {
+				System.out.println(memID);
+				System.out.println("test session made success");
+				session = factory.openSession();
+				FavoriteMapper mapper = session.getMapper(FavoriteMapper.class);
+				m = mapper.test(memID);
+				System.out.println(m);
+				session.commit();
+
+		 }catch(Exception e) {
+				e.printStackTrace();
+					
+		 }finally {
+				session.close();
+		 }
+		return m;
+	}
+	
 }

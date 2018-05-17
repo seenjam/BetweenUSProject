@@ -1,12 +1,12 @@
 package VO;
 
 public class FriendVO {
-	private String memID1;					// ¼­·Î Ä£±¸ °ü°èÀÎ µÎ»ç¶÷ÀÇ ID
+	private String memID1;					// ï¿½ï¿½ï¿½ï¿½ Ä£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î»ï¿½ï¿½ï¿½ï¿½ ID
 	private String memID2;
 	public FriendVO(String memID1, String memID2) {
 		super();
-		memID1 = memID1;
-		memID2 = memID2;
+		this.memID1 = memID1;
+		this.memID2 = memID2;
 	}
 	public FriendVO() {
 		super();

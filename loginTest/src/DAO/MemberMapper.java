@@ -25,5 +25,7 @@ public interface MemberMapper {
 	public void settingBetweenFriends(FriendVO fv);
 	public ArrayList<String> findingMyFriendsID(String myID);
 	public MemberVO findingMyFriend(String id);
+	public int friendsCount(String myID);
 	public ArrayList<String> friendsCheck(String myID);
+
 }

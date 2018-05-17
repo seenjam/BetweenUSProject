@@ -235,8 +235,10 @@ public class MemberDAO {
 	public void settingfriends(FriendVO fv) {			//searchFriendsUI에서 새로운 친구들
 		SqlSession session = null;
 		try {
+			System.out.println("settingfriends session");
 			session = factory.openSession();
 			MemberMapper mapper = session.getMapper(MemberMapper.class);
+			System.out.println(fv);
 			mapper.settingfriends(fv);
 			session.commit();
 
@@ -251,6 +253,7 @@ public class MemberDAO {
 	public void settingBetweenFriends(FriendVO fv) {			//searchFriendsUI에서 새로운 친구들
 		SqlSession session = null;
 		try {
+			System.out.println("settingBetweenFriends session");
 			session = factory.openSession();
 			MemberMapper mapper = session.getMapper(MemberMapper.class);
 			mapper.settingBetweenFriends(fv);
@@ -305,16 +308,14 @@ public class MemberDAO {
 		return f;
 	}
 	
-	public ArrayList<String> friendsCheck(String myID) {
-		
-	
-		ArrayList<String> anotherID =new ArrayList<>();
+	public int friendsCount(String myID) {
+		int friendCount = 0;
 		SqlSession session = null;
 		try {
 			session = factory.openSession();
 			MemberMapper mapper = session.getMapper(MemberMapper.class);
 
-			anotherID = mapper.friendsCheck(myID);
+			friendCount = mapper.friendsCount(myID);
 			session.commit();
 
 		} catch (Exception e) {
@@ -324,9 +325,27 @@ public class MemberDAO {
 			session.close();
 		}
 
-		return anotherID;
+		return friendCount;
 	}
 	
+	public ArrayList<String> friendsCheck(String myID) {
+		SqlSession session = null;
+		ArrayList<String> friendsID =new ArrayList<>();
+		//MemberVO mem = null;
+		try {
+			session = factory.openSession();
+			MemberMapper mapper = session.getMapper(MemberMapper.class);
 
+			friendsID = mapper.friendsCheck(myID);
+			session.commit();
 
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			session.close();
+		}
+		return friendsID;
+	}
+	
 }

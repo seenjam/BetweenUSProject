@@ -32,7 +32,7 @@ public class MemberMain extends JFrame{
 		loginUi.setVisible(true);
 		memUi.setVisible(false);
 	}
-	
+
 	//회원가입클릭 시 
 	public void showSignUp() {
 		memUi = new MemberUI();
@@ -66,6 +66,9 @@ public class MemberMain extends JFrame{
 		//friendUi.setVisible(true);
 		
 	}
+	
+
+
 
 
 }

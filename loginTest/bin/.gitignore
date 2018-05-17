@@ -1,10 +1,8 @@
-/DAO/
-/Main/
-/Member.sql
-/MemberMapper.xml
-/PlaceMapper.xml
 /UI/
+/DAO/
+/TwoPlaceMapper.xml
+/Favorite.xml
 /VO/
-/db.properties
-/images/
-/mybatis-config.xml
+/TwoPlaceMapper.out.xml
+/FavoriteMapper.xml
+/Main/
