@@ -69,6 +69,7 @@ public class HomeUI extends JFrame implements ChangeListener{
 		// TODO Auto-generated method stub
 		if (arg0.getSource() ==tabbedPane ) {
 			searchTwoPlaceUI = new SearchTwoPlaceUI(myInfo);
+			
 		}
 	}
 }
