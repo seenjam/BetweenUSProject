@@ -3,6 +3,8 @@ package Main;
 import javax.swing.JFrame;
 import javax.swing.JList;
 
+import com.wooriclient.ChatClientMain;
+
 import DAO.MemberDAO;
 import UI.HOME.FriendUI;
 import UI.HOME.HomeUI;
@@ -19,6 +21,7 @@ public class MemberMain extends JFrame{
 	private static SearchFriendsUI searchFriendsUI;
 	private MemberDAO dao;
 	private MemberVO mem;
+	private static ChatClientMain chatcClientMain;
 	
 	public static void main(String[] args) {
 		//PersonMain main =new PersonMain();
@@ -64,6 +67,20 @@ public class MemberMain extends JFrame{
 		
 		searchFriendsUI.setVisible(false);
 		//friendUi.setVisible(true);
+		
+	}
+	
+
+
+	public void showChattingWindow(MemberVO myInfo, MemberVO friendInfo) {
+		//chatcClientMtry {
+		try {
+			ChatClientMain frame = new ChatClientMain(myInfo, friendInfo,"203.233.196.118", 3333);
+			frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//chatcClientMain.setVisible(true);
 		
 	}
 	
